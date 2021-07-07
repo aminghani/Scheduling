@@ -1,11 +1,16 @@
 package DataAccess;
 
 import models.Bell;
+import models.Course;
 import models.Day;
 import models.TimetableBell;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 public class TimeTableBellDAO {
 
@@ -20,17 +25,11 @@ public class TimeTableBellDAO {
         return session;
     }
 
-    public void addTimeTableBell(Bell bell, Day day){
+    public void addTimeTableBell(TimetableBell timetableBell){
         Session session = getHibernateSession();
 
         try{
             session.beginTransaction();
-
-            TimetableBell timetableBell = new TimetableBell();
-
-            timetableBell.setBell(bell);
-
-            timetableBell.setDay(day);
 
             session.save(timetableBell);
 
@@ -54,5 +53,21 @@ public class TimeTableBellDAO {
             session.close();
         }
         return timetableBell;
+    }
+
+    public List<TimetableBell> getAllTimeTableBells(){
+        Session session = getHibernateSession();
+        List<TimetableBell> timetableBells = null;
+
+        try{
+            session.beginTransaction();
+
+            timetableBells =  session.createCriteria(TimetableBell.class).list();
+
+            session.getTransaction().commit();
+        }finally {
+            session.close();
+        }
+        return timetableBells;
     }
 }

@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "admin")
-public class Admin {
+public class Admin implements User{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

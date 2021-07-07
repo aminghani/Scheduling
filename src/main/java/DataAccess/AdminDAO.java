@@ -1,10 +1,13 @@
 package DataAccess;
 
 import models.Admin;
+import models.Master;
 import models.Student;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+
+import java.util.List;
 
 public class AdminDAO {
 
@@ -17,7 +20,7 @@ public class AdminDAO {
         return session;
     }
 
-    public void createStudent(Admin admin){
+    public void createAdmin(Admin admin){
         Session session = getHibernateSession();
 
         try {
@@ -29,5 +32,21 @@ public class AdminDAO {
         }finally {
             session.close();
         }
+    }
+
+    public List<Admin> getAllAdmins(){
+        Session session = getHibernateSession();
+        List<Admin> admins = null;
+        try {
+            session.beginTransaction();
+
+            admins =  session.createCriteria(Admin.class).list();
+
+            session.getTransaction().commit();
+
+        }finally {
+            session.close();
+        }
+        return admins;
     }
 }

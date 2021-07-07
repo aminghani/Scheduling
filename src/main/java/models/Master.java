@@ -5,7 +5,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "master")
-public class Master {
+public class Master implements User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -18,6 +18,11 @@ public class Master {
     private String password;
     @Column(name = "code")
     private String code;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "master_course",
+                joinColumns = @JoinColumn(name = "master_id"),
+                inverseJoinColumns = @JoinColumn(name = "course_id"))
+    private List<Course> courses;
 
 
     public Master(String firstName,String lastname,String password,String code) {
@@ -73,4 +78,11 @@ public class Master {
         this.code = code;
     }
 
+    public List<Course> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(List<Course> courses) {
+        this.courses = courses;
+    }
 }

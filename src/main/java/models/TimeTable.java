@@ -1,8 +1,15 @@
 package models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
 @Entity
 @Table(name = "timetable")
 public class TimeTable {
@@ -10,20 +17,25 @@ public class TimeTable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "master_id")
     private Master master;
+
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "timetable_id")
     private List<TimetableBell> timetableBells;
-    @OneToOne(cascade = CascadeType.ALL)
+
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "course_id_tt")
     private Course course;
+
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "timetable_student",
     joinColumns = @JoinColumn(name = "timetable_id"),
     inverseJoinColumns = @JoinColumn(name = "student_id"))
     private List<Student> students;
+
     public TimeTable(Master master, List<TimetableBell> timetableBells, Course course) {
         this.master = master;
         this.timetableBells = timetableBells;

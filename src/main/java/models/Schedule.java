@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Schedule {
-    private List<Course> courses;
+  /*  private List<Course> courses;
     private List<TimetableBell> timetableBells;
     private int availableClasses;
 
@@ -87,16 +87,7 @@ public class Schedule {
         }
 
         return timeTables;
-    }
-
-    @Override
-    public String toString() {
-        return "Schedule{" +
-                "courses=" + courses +
-                ", timetableBells=" + timetableBells +
-                ", availableClasses=" + availableClasses +
-                '}';
-    }
+    }*/
 
     public static void main(String[] args) {
         /*List<Course> courses = new ArrayList<>();

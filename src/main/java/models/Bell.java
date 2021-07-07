@@ -16,6 +16,12 @@ public class Bell {
     @Column(name = "bellOfDay")
     private int bellOfDay;
 
+    @OneToOne(mappedBy = "bellMapped")
+    private TimetableBell timetableBell;
+
+
+
+
     public Bell(String label, int bellOfDay){
         this.label = label;
         this.bellOfDay = bellOfDay;

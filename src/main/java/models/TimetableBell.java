@@ -12,14 +12,14 @@ public class TimetableBell {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "bell_id")
-    private Bell bell;
+    private Bell bellMapped;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "day_id")
     private Day day;
 
     public TimetableBell(Bell bell, Day day) {
-        this.bell = bell;
+        this.bellMapped = bell;
         this.day = day;
     }
 
@@ -28,11 +28,11 @@ public class TimetableBell {
     }
 
     public Bell getBell() {
-        return bell;
+        return bellMapped;
     }
 
     public void setBell(Bell bell) {
-        this.bell = bell;
+        this.bellMapped = bell;
     }
 
     public Day getDay() {
@@ -46,7 +46,7 @@ public class TimetableBell {
     @Override
     public String toString() {
         return "TimetableBell{" +
-                "bell=" + bell +
+                "bell=" + bellMapped +
                 ", day=" + day +
                 '}';
     }

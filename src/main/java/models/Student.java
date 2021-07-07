@@ -1,11 +1,14 @@
 package models;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
 @Table(name = "student")
-public class Student {
+public class Student implements User {
     @javax.persistence.Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -22,6 +25,7 @@ public class Student {
     @JoinTable(name = "timetable_student",
             joinColumns = @JoinColumn(name = "student_id"),
             inverseJoinColumns = @JoinColumn(name = "timetable_id"))
+    @Fetch(FetchMode.JOIN)
     private List<TimeTable> timeTables;
 
     public Student( String firstName, String lastname, String password, String code) {

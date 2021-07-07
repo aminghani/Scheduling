@@ -16,9 +16,13 @@ public class Course {
     private String title;
     @Column(name = "unitCount")
     private int unitsCount;
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "course_id")
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(name = "master_course",
+                joinColumns = @JoinColumn(name = "course_id"),
+                inverseJoinColumns = @JoinColumn(name = "master_id"))
     private List<Master> masters;
+    @OneToMany(mappedBy = "course")
+    private List<TimeTable> timeTables;
 
     public Course(String title, int unitsCount) {
         this.title = title;
@@ -61,5 +65,19 @@ public class Course {
         this.masters = masters;
     }
 
+    public int getId() {
+        return id;
+    }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public List<TimeTable> getTimeTables() {
+        return timeTables;
+    }
+
+    public void setTimeTables(List<TimeTable> timeTables) {
+        this.timeTables = timeTables;
+    }
 }
