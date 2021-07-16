@@ -49,4 +49,23 @@ public class AdminDAO {
         }
         return admins;
     }
+
+    public Admin findByUsername2(String code){
+        Session session = getHibernateSession();
+        Admin admin = null;
+        try {
+            session.beginTransaction();
+            List<Admin> admins;
+            admins= session.createCriteria(Admin.class).list();
+            session.getTransaction().commit();
+            for(Admin admin1:admins){
+                if(admin1.getCode().equals(code)){
+                    return admin1;
+                }
+            }
+        }finally {
+            session.close();
+        }
+        return null;
+    }
 }

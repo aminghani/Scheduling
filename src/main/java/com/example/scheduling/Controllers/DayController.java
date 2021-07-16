@@ -28,4 +28,9 @@ public class DayController {
     public void updateDayById(@RequestBody Day day,@PathVariable int id){
         new DayDAO().updateDayById(day,id);
     }
+
+    @DeleteMapping("/api/Days/{id}")
+    public void deleteDayById(@PathVariable int id){
+        new DayDAO().deleteDayById(id);
+    }
 }

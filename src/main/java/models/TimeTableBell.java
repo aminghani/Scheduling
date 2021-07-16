@@ -1,10 +1,13 @@
 package models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "timetablebell")
-public class TimetableBell {
+public class TimeTableBell {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -12,27 +15,37 @@ public class TimetableBell {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "bell_id")
-    private Bell bellMapped;
+    @JsonManagedReference
+    private Bell bell;
 
-    @OneToOne(cascade = CascadeType.ALL)
+
+    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     @JoinColumn(name = "day_id")
     private Day day;
 
-    public TimetableBell(Bell bell, Day day) {
-        this.bellMapped = bell;
+    public TimeTableBell(Bell bell, Day day) {
+        this.bell = bell;
         this.day = day;
     }
 
-    public TimetableBell(){
+    public TimeTableBell(){
 
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public Bell getBell() {
-        return bellMapped;
+        return bell;
     }
 
     public void setBell(Bell bell) {
-        this.bellMapped = bell;
+        this.bell = bell;
     }
 
     public Day getDay() {
@@ -41,13 +54,5 @@ public class TimetableBell {
 
     public void setDay(Day day) {
         this.day = day;
-    }
-
-    @Override
-    public String toString() {
-        return "TimetableBell{" +
-                "bell=" + bellMapped +
-                ", day=" + day +
-                '}';
     }
 }

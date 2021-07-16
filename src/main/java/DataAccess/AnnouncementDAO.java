@@ -16,7 +16,7 @@ public class AnnouncementDAO {
                         addAnnotatedClass(TimeTable.class).
                         addAnnotatedClass(Bell.class).
                         addAnnotatedClass(Day.class).
-                        addAnnotatedClass(TimetableBell.class).
+                        addAnnotatedClass(TimeTableBell.class).
                         addAnnotatedClass(Master.class).
                         addAnnotatedClass(Course.class).
                         addAnnotatedClass(Student.class).

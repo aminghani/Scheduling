@@ -1,14 +1,19 @@
 package DataAccess;
 
+import com.example.scheduling.Controllers.util.Encoder;
 import models.*;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-public class StudentDAO {
+@Repository
+public class StudentDAO{
 
     private Session getHibernateSession(){
         SessionFactory sessionFactory = new Configuration()
@@ -16,7 +21,7 @@ public class StudentDAO {
                 .addAnnotatedClass(Student.class)
                 .addAnnotatedClass(TimeTable.class)
                 .addAnnotatedClass(Master.class)
-                .addAnnotatedClass(TimetableBell.class)
+                .addAnnotatedClass(TimeTableBell.class)
                 .addAnnotatedClass(Course.class)
                 .addAnnotatedClass(Bell.class)
                 .addAnnotatedClass(Day.class)
@@ -30,6 +35,8 @@ public class StudentDAO {
 
         try {
             session.beginTransaction();
+
+        //    student.setPassword(new Encoder().bCryptPasswordEncoder().encode(student.getPassword()));
 
             session.save(student);
 
@@ -94,7 +101,7 @@ public class StudentDAO {
 
             Student student = session.get(Student.class,id);
 
-            student.setFirstName(newStudent.getFirstName());
+            student.setFirstname(newStudent.getFirstname());
             student.setLastname(newStudent.getLastname());
             student.setCode(newStudent.getCode());
             student.setPassword(newStudent.getPassword());
@@ -113,6 +120,8 @@ public class StudentDAO {
             session.beginTransaction();
 
             for(Student student:students){
+          //      student.setPassword(new Encoder().bCryptPasswordEncoder().encode(student.getPassword()));
+
                 session.save(student);
             }
 
@@ -122,4 +131,61 @@ public class StudentDAO {
         }
     }
 
+    public void deleteStudentById(int id){
+        Session session = getHibernateSession();
+
+        try {
+            session.beginTransaction();
+
+            Query query = session.createQuery("delete from Student where id=:theId");
+            query.setParameter("theId",id);
+            query.executeUpdate();
+
+            session.getTransaction().commit();
+
+        }finally {
+            session.close();
+        }
+    }
+
+
+    public Student findByUsername(String code){
+        Session session = getHibernateSession();
+        Student student = null;
+        try{
+            session.beginTransaction();
+
+            Query query = session.createQuery("FROM Student S WHERE S.code=:theCode");
+
+            query.setParameter("theCode",code);
+
+            student = (Student) query.getSingleResult();
+
+            session.getTransaction().commit();
+
+        }finally {
+            session.close();
+        }
+
+        return student;
+    }
+
+    public Student findByUsername2(String code){
+        Session session = getHibernateSession();
+        Student student = null;
+        try {
+            session.beginTransaction();
+            List<Student> students;
+            students= session.createCriteria(Student.class).list();
+            session.getTransaction().commit();
+            for(Student student1:students){
+                if(student1.getCode().equals(code)){
+                    return student1;
+                }
+            }
+        }finally {
+            session.close();
+        }
+        return null;
+    }
 }

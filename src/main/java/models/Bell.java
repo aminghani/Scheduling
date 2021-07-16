@@ -1,5 +1,8 @@
 package models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -16,19 +19,29 @@ public class Bell {
     @Column(name = "bellOfDay")
     private int bellOfDay;
 
-    @OneToOne(mappedBy = "bellMapped")
-    private TimetableBell timetableBell;
+    @OneToOne(mappedBy = "bell")
+    @JsonBackReference
+    private TimeTableBell timetableBell;
 
 
 
+    public Bell(){
+
+    }
 
     public Bell(String label, int bellOfDay){
         this.label = label;
         this.bellOfDay = bellOfDay;
     }
 
-    public Bell(){
 
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getLabel() {
@@ -43,23 +56,15 @@ public class Bell {
         return bellOfDay;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public void setBellOfDay(int bellOfDay) {
         this.bellOfDay = bellOfDay;
     }
 
-    @Override
-    public String toString() {
-        return "Bell{" +
-                "label='" + label + '\'' +
-                ", bellOfDay=" + bellOfDay +
-                '}';
+    public TimeTableBell getTimetableBell() {
+        return timetableBell;
+    }
+
+    public void setTimetableBell(TimeTableBell timetableBell) {
+        this.timetableBell = timetableBell;
     }
 }

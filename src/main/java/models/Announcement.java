@@ -13,8 +13,9 @@ public class Announcement {
     private int id;
     @Column(name = "text")
     private String text;
-    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "timetable_id")
+    @JsonIgnore
     private TimeTable timeTableId;
     public Announcement( String text, TimeTable timeTableId) {
         this.id = id;
@@ -48,6 +49,8 @@ public class Announcement {
     public void setTimeTableId(TimeTable timeTableId) {
         this.timeTableId = timeTableId;
     }
+
+
 
     @Override
     public String toString() {

@@ -1,14 +1,12 @@
 package DataAccess;
 
 import models.Bell;
-import models.Course;
 import models.Day;
-import models.TimetableBell;
+import models.TimeTableBell;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
-import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Repository;
+import org.hibernate.query.Query;
 
 import java.util.List;
 
@@ -17,15 +15,15 @@ public class TimeTableBellDAO {
     private Session getHibernateSession(){
         SessionFactory sessionFactory = new Configuration()
                 .configure("hibernate.cfg.xml").
+                        addAnnotatedClass(TimeTableBell.class).
                         addAnnotatedClass(Bell.class).
                         addAnnotatedClass(Day.class).
-                        addAnnotatedClass(TimetableBell.class).
                         buildSessionFactory();
         Session session = sessionFactory.getCurrentSession();
         return session;
     }
 
-    public void addTimeTableBell(TimetableBell timetableBell){
+    public void addTimeTableBell(TimeTableBell timetableBell){
         Session session = getHibernateSession();
 
         try{
@@ -39,14 +37,14 @@ public class TimeTableBellDAO {
         }
     }
 
-    public TimetableBell getTimeTableBellById(int id){
+    public TimeTableBell getTimeTableBellById(int id){
         Session session = getHibernateSession();
 
-        TimetableBell timetableBell = null;
+        TimeTableBell timetableBell = null;
         try{
             session.beginTransaction();
 
-            timetableBell = session.get(TimetableBell.class, id);
+            timetableBell = session.get(TimeTableBell.class, id);
 
             session.getTransaction().commit();
         }finally {
@@ -55,19 +53,36 @@ public class TimeTableBellDAO {
         return timetableBell;
     }
 
-    public List<TimetableBell> getAllTimeTableBells(){
+    public List<TimeTableBell> getAllTimeTableBells(){
         Session session = getHibernateSession();
-        List<TimetableBell> timetableBells = null;
+        List<TimeTableBell> timetableBells = null;
 
         try{
             session.beginTransaction();
 
-            timetableBells =  session.createCriteria(TimetableBell.class).list();
+            timetableBells =  session.createCriteria(TimeTableBell.class).list();
 
             session.getTransaction().commit();
         }finally {
             session.close();
         }
         return timetableBells;
+    }
+
+    public void deleteTimeTableBellById(int id){
+        Session session = getHibernateSession();
+
+        try {
+            session.beginTransaction();
+
+            Query query = session.createQuery("delete from TimeTableBell where id=:theId");
+            query.setParameter("theId",id);
+            query.executeUpdate();
+
+            session.getTransaction().commit();
+
+        }finally {
+            session.close();
+        }
     }
 }

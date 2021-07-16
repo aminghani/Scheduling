@@ -1,16 +1,23 @@
 package com.example.scheduling.Controllers;
 
 import DataAccess.CourseDAO;
+import DataAccess.MasterDAO;
+import com.example.scheduling.Controllers.util.JwtUtil;
+import com.example.scheduling.Controllers.util.MyUserDetailsService;
 import models.Course;
 import models.Master;
 import models.TimeTable;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @RestController
 public class CourseController {
+
 
     @GetMapping("/api/Courses")
     public List<Course> getAllCourses(@RequestParam(value = "unitCount",required = false) String unitCount){
@@ -33,18 +40,27 @@ public class CourseController {
     }
 
     @GetMapping("/api/Courses/{id}/TimeTables")
-    public List<TimeTable> getCourseTimeTableById(@PathVariable int id){
+    public Set<TimeTable> getCourseTimeTableById(@PathVariable int id){
         return new CourseDAO().getCourseTimeTablesById(id);
     }
 
     @GetMapping("/api/Courses/{id}/Masters")
-    public List<Master> getCourseMastersById(@PathVariable int id){
+    public Set<Master> getCourseMastersById(@PathVariable int id){
         return new CourseDAO().getCourseMastersById(id);
     }
 
-    @PostMapping("/api/Courses/{id}/Choose")
-    public void chooseCourseMasterById(@PathVariable int id){
-        new CourseDAO();
+    @DeleteMapping("/api/Courses/{id}")
+    public void deleteCourseById(@PathVariable int id){
+        new CourseDAO().deleteCourseById(id);
     }
+
+    @PostMapping("/api/Courses/{id}/Choose")
+    public void chooseCourseForMaster(@PathVariable int id,@RequestHeader("Authorization") String header){
+        String jwt = header;
+        String username = new JwtUtil().extractUsername(jwt);
+        Master master = new MasterDAO().findByUsername(username);
+        new CourseDAO().addMasterToCourse(id,master.getId());
+    }
+
 
 }

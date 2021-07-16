@@ -10,7 +10,6 @@ import java.util.List;
 @RestController
 public class BellController {
 
-
     @GetMapping("/api/Bells")
     public List<Bell> getAllBells(){
         return new BellDAO().getAllBells();

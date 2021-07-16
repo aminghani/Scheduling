@@ -19,16 +19,17 @@ public class TimeTableDAO {
                 .configure("hibernate.cfg.xml").
                         addAnnotatedClass(Master.class).
                         addAnnotatedClass(Course.class).
-                        addAnnotatedClass(TimetableBell.class).
+                        addAnnotatedClass(TimeTableBell.class).
                         addAnnotatedClass(TimeTable.class).
                         addAnnotatedClass(Bell.class).
                         addAnnotatedClass(Day.class).
+                        addAnnotatedClass(Student.class).
                         buildSessionFactory();
         Session session = sessionFactory.getCurrentSession();
         return session;
     }
 
-    public void addTimeTable(Master master, Course course, List<TimetableBell> timetableBells){
+    public void addTimeTable(Master master, Course course, List<TimeTableBell> timetableBells){
         Session session = getHibernateSession();
 
         try {
@@ -37,7 +38,7 @@ public class TimeTableDAO {
             TimeTable timeTable = new TimeTable();
             timeTable.setMaster(master);
             timeTable.setCourse(course);
-            for(TimetableBell timetableBell:timetableBells){
+            for(TimeTableBell timetableBell:timetableBells){
                 timeTable.addTimeTableBell(timetableBell);
             }
 
@@ -102,6 +103,26 @@ public class TimeTableDAO {
             session.close();
         }
         return timeTables;
+    }
+
+    public void addStudentToTimeTable(int timeTableId,int studentId){
+        Session session = getHibernateSession();
+
+        try{
+            session.beginTransaction();
+
+            TimeTable timeTable = getTimeTableById(timeTableId);
+
+            Student student = new StudentDAO().getStudentById(studentId);
+
+            timeTable.addStudent(student);
+
+            session.saveOrUpdate(timeTable);
+
+            session.getTransaction().commit();
+        }finally {
+            session.close();
+        }
     }
 
     public TimeTable getTimeTableById(int id){

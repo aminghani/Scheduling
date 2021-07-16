@@ -1,13 +1,14 @@
 package com.example.scheduling.Controllers;
 
-import DataAccess.TimeTableBellDAO;
+import DataAccess.CourseDAO;
+import DataAccess.MasterDAO;
+import DataAccess.StudentDAO;
 import DataAccess.TimeTableDAO;
+import com.example.scheduling.Controllers.util.JwtUtil;
+import models.Master;
+import models.Student;
 import models.TimeTable;
-import models.TimetableBell;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -26,5 +27,12 @@ public class TimeTableController {
         return new TimeTableDAO().getTimeTableById(id);
     }
 
+    @PostMapping("/api/TimeTables/{id}/Choose")
+    public void chooseTimeTableForStudent(@PathVariable int id,@RequestHeader("Authorization") String header){
+        String jwt = header;
+        String username = new JwtUtil().extractUsername(jwt);
+        Student student = new StudentDAO().findByUsername(username);
+        new TimeTableDAO().addStudentToTimeTable(id,student.getId());
+    }
 
 }

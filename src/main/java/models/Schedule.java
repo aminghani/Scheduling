@@ -1,15 +1,13 @@
 package models;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class Schedule {
-  /*  private List<Course> courses;
-    private List<TimetableBell> timetableBells;
+   /* private List<Course> courses;
+    private Set<TimeTableBell> timetableBells;
     private int availableClasses;
 
-    public Schedule(List<Course> courses, List<TimetableBell> timetableBells, int availableClasses) {
+    public Schedule(List<Course> courses, Set<TimeTableBell> timetableBells, int availableClasses) {
         this.courses = courses;
         this.timetableBells = timetableBells;
         this.availableClasses = availableClasses;
@@ -23,11 +21,11 @@ public class Schedule {
         this.courses = courses;
     }
 
-    public List<TimetableBell> getTimetableBells() {
+    public Set<TimeTableBell> getTimetableBells() {
         return timetableBells;
     }
 
-    public void setTimetableBells(List<TimetableBell> timetableBells) {
+    public void setTimetableBells(Set<TimeTableBell> timetableBells) {
         this.timetableBells = timetableBells;
     }
 
@@ -49,7 +47,7 @@ public class Schedule {
         for(Course course:getCourses()) {
             for (Master master : course.getMasters()) {
                 if (classCounter < getAvailableClasses()) {
-                    List<TimetableBell> timetableBells = new ArrayList<>();
+                    Set<TimeTableBell> timetableBells = new HashSet<>();
                     timetableBells.add(getTimetableBells().get(timeTableCounter1));
                     if (course.getUnitsCount()>2){
                         if(classCounter2 < getAvailableClasses()){
@@ -86,8 +84,8 @@ public class Schedule {
 
         }
 
-        return timeTables;
-    }*/
+        return timeTables;*/
+  //  }
 
     public static void main(String[] args) {
         /*List<Course> courses = new ArrayList<>();

@@ -1,9 +1,10 @@
 package models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -18,25 +19,27 @@ public class TimeTable {
     @Column(name = "id")
     private int id;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "master_id")
+    @JsonBackReference
     private Master master;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     @JoinColumn(name = "timetable_id")
-    private List<TimetableBell> timetableBells;
+    private Set<TimeTableBell> timetableBells;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "course_id_tt")
     private Course course;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     @JoinTable(name = "timetable_student",
     joinColumns = @JoinColumn(name = "timetable_id"),
     inverseJoinColumns = @JoinColumn(name = "student_id"))
+    @JsonIgnore
     private List<Student> students;
 
-    public TimeTable(Master master, List<TimetableBell> timetableBells, Course course) {
+    public TimeTable(Master master, Set<TimeTableBell> timetableBells, Course course) {
         this.master = master;
         this.timetableBells = timetableBells;
         this.course = course;
@@ -51,14 +54,21 @@ public class TimeTable {
     }
 
     public TimeTable(){
-        timetableBells = new ArrayList<>();
+        timetableBells = new HashSet<>();
     }
 
-    public void addTimeTableBell(TimetableBell timetableBell){
+    public void addTimeTableBell(TimeTableBell timetableBell){
         if(timetableBells == null){
-            timetableBells = new ArrayList<>();
+            timetableBells = new HashSet<>();
         }
         timetableBells.add(timetableBell);
+    }
+
+    public void addStudent(Student student){
+        if (students == null){
+            students = new ArrayList<>();
+        }
+        students.add(student);
     }
     public Master getMaster() {
         return master;
@@ -68,11 +78,11 @@ public class TimeTable {
         this.master = master;
     }
 
-    public List<TimetableBell> getTimetableBells() {
+    public Set<TimeTableBell> getTimetableBells() {
         return timetableBells;
     }
 
-    public void setTimetableBells(List<TimetableBell> timetableBells) {
+    public void setTimetableBells(Set<TimeTableBell> timetableBells) {
         this.timetableBells = timetableBells;
     }
 
@@ -82,6 +92,14 @@ public class TimeTable {
 
     public void setCourse(Course course) {
         this.course = course;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     @Override

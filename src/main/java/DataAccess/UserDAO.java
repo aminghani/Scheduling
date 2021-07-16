@@ -19,7 +19,7 @@ public class UserDAO {
                 .configure("hibernate.cfg.xml").
                         addAnnotatedClass(Master.class).
                         addAnnotatedClass(Course.class).
-                        addAnnotatedClass(TimetableBell.class).
+                        addAnnotatedClass(TimeTableBell.class).
                         addAnnotatedClass(TimeTable.class).
                         addAnnotatedClass(Bell.class).
                         addAnnotatedClass(Day.class).
@@ -30,7 +30,7 @@ public class UserDAO {
         return session;
     }
 
-    public List<User> getAllUsers(String search){
+   /* public List<User> getAllUsers(String search){
         Session session = getHibernateSession();
         List<User> users = new ArrayList<>();
         try {
@@ -54,5 +54,5 @@ public class UserDAO {
             users.add(studentDAO.getStudentById(id));
         }
         return users;
-    }
+    }*/
 }

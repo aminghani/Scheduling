@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "admin")
-public class Admin implements User{
+public class Admin extends User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -25,10 +25,11 @@ public class Admin implements User{
         this.lastname = lastname;
         this.password = password;
         this.code = code;
+        setRole("ROLE_ADMIN");
     }
 
     public Admin(){
-
+        setRole("ROLE_ADMIN");
     }
 
     public int getId() {

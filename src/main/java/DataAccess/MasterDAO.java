@@ -1,5 +1,6 @@
 package DataAccess;
 
+import com.example.scheduling.Controllers.util.Encoder;
 import models.*;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -19,7 +20,7 @@ public class MasterDAO {
                         addAnnotatedClass(Master.class).
                         addAnnotatedClass(Course.class).
                         addAnnotatedClass(TimeTable.class).
-                        addAnnotatedClass(TimetableBell.class).
+                        addAnnotatedClass(TimeTableBell.class).
                         addAnnotatedClass(Bell.class).
                         addAnnotatedClass(Day.class).
                         addAnnotatedClass(Student.class).
@@ -33,6 +34,8 @@ public class MasterDAO {
 
         try{
             session.beginTransaction();
+
+    //        master.setPassword(new Encoder().bCryptPasswordEncoder().encode(master.getPassword()));
 
             session.save(master);
 
@@ -95,7 +98,7 @@ public class MasterDAO {
 
             Master master = session.get(Master.class,id);
 
-            master.setFirstName(newMaster.getFirstName());
+            master.setFirstname(newMaster.getFirstname());
             master.setLastname(newMaster.getLastname());
             master.setCode(newMaster.getCode());
             master.setPassword(newMaster.getPassword());
@@ -114,6 +117,8 @@ public class MasterDAO {
             session.beginTransaction();
 
             for(Master master:masters){
+     //           master.setPassword(new Encoder().bCryptPasswordEncoder().encode(master.getPassword()));
+
                 session.save(master);
             }
 
@@ -124,5 +129,61 @@ public class MasterDAO {
 
     }
 
+    public void deleteMasterById(int id){
+        Session session = getHibernateSession();
+
+        try {
+            session.beginTransaction();
+
+            Query query = session.createQuery("delete from Master where id=:theId");
+            query.setParameter("theId",id);
+            query.executeUpdate();
+
+            session.getTransaction().commit();
+
+        }finally {
+            session.close();
+        }
+    }
+
+    public Master findByUsername(String code){
+        Session session = getHibernateSession();
+        Master master = null;
+        try{
+            session.beginTransaction();
+
+            Query query = session.createQuery("FROM Master M WHERE M.code=:theCode");
+
+            query.setParameter("theCode",code);
+
+            master = (Master) query.getSingleResult();
+
+            session.getTransaction().commit();
+
+        }finally {
+            session.close();
+        }
+
+        return master;
+    }
+
+    public Master findByUsername2(String code){
+        Session session = getHibernateSession();
+        Student student = null;
+        try {
+            session.beginTransaction();
+            List<Master> master;
+            master= session.createCriteria(Master.class).list();
+            session.getTransaction().commit();
+            for(Master master1:master){
+                if(master1.getCode().equals(code)){
+                    return master1;
+                }
+            }
+        }finally {
+            session.close();
+        }
+        return null;
+    }
 
 }

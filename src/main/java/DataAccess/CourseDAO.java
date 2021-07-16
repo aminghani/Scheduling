@@ -9,7 +9,9 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
 
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class CourseDAO {
     private Session getHibernateSession(){
@@ -18,7 +20,7 @@ public class CourseDAO {
                         .addAnnotatedClass(Course.class)
                         .addAnnotatedClass(Master.class)
                         .addAnnotatedClass(TimeTable.class)
-                        .addAnnotatedClass(TimetableBell.class)
+                        .addAnnotatedClass(TimeTableBell.class)
                         .addAnnotatedClass(Bell.class)
                         .addAnnotatedClass(Day.class)
                         .addAnnotatedClass(Student.class)
@@ -57,6 +59,26 @@ public class CourseDAO {
             session.close();
         }
         return course;
+    }
+
+    public void addMasterToCourse(int courseId,int masterId){
+        Session session = getHibernateSession();
+
+        try{
+            session.beginTransaction();
+
+            Course course = getCourseById(courseId);
+
+            Master master = new MasterDAO().getMasterById(masterId);
+
+            course.addMaster(master);
+
+            session.saveOrUpdate(course);
+
+            session.getTransaction().commit();
+        }finally {
+            session.close();
+        }
     }
 
     public List<Course> getAllCourses(String unitCount){
@@ -109,9 +131,9 @@ public class CourseDAO {
         }
     }
 
-    public List<TimeTable> getCourseTimeTablesById(int id){
+    public Set<TimeTable> getCourseTimeTablesById(int id){
         Session session = getHibernateSession();
-        List<TimeTable> timeTables = null;
+        Set<TimeTable> timeTables = null;
 
         try{
             session.beginTransaction();
@@ -128,9 +150,9 @@ public class CourseDAO {
 
     }
 
-    public List<Master> getCourseMastersById(int id){
+    public Set<Master> getCourseMastersById(int id){
         Session session = getHibernateSession();
-        List<Master> masters = null;
+        Set<Master> masters = null;
 
         try{
             session.beginTransaction();
@@ -146,13 +168,39 @@ public class CourseDAO {
         return masters;
     }
 
-   /* public void chooseCourseMasterById(int id){
+   public void deleteCourseById(int id){
+       Session session = getHibernateSession();
+
+       try {
+           session.beginTransaction();
+
+           Query query = session.createQuery("delete from Course where id=:theId");
+           query.setParameter("theId",id);
+           query.executeUpdate();
+
+           session.getTransaction().commit();
+
+       }finally {
+           session.close();
+       }
+   }
+
+   /*public void test(){
         Session session = getHibernateSession();
 
-        try{
+        try {
             session.beginTransaction();
-        }
-    }*/
 
+            Master master = new Master("test","test","pass","code");
+
+            Course course = new Course("test", 3);
+
+            master.addCourse(course);
+
+            course.addMaster(master);
+
+        }
+
+   }*/
 
 }

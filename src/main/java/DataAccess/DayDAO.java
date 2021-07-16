@@ -1,10 +1,13 @@
 package DataAccess;
 
 import models.Announcement;
+import models.Bell;
 import models.Day;
+import models.TimeTableBell;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.query.Query;
 
 import java.util.List;
 
@@ -14,6 +17,8 @@ public class DayDAO {
         SessionFactory sessionFactory = new Configuration()
                 .configure("hibernate.cfg.xml").
                         addAnnotatedClass(Day.class).
+                        addAnnotatedClass(TimeTableBell.class).
+                        addAnnotatedClass(Bell.class).
                         buildSessionFactory();
         Session session = sessionFactory.getCurrentSession();
         return session;
@@ -56,7 +61,7 @@ public class DayDAO {
         try {
             session.beginTransaction();
 
-            days =  session.createCriteria(Announcement.class).list();
+            days =  session.createCriteria(Day.class).list();
 
             session.getTransaction().commit();
 
@@ -91,6 +96,23 @@ public class DayDAO {
             day.setDayOfWeek(newDay.getDayOfWeek());
 
             day.setLabel(newDay.getLabel());
+
+            session.getTransaction().commit();
+
+        }finally {
+            session.close();
+        }
+    }
+
+    public void deleteDayById(int id){
+        Session session = getHibernateSession();
+
+        try {
+            session.beginTransaction();
+
+            Query query = session.createQuery("delete from Day where id=:theId");
+            query.setParameter("theId",id);
+            query.executeUpdate();
 
             session.getTransaction().commit();
 
