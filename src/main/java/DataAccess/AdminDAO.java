@@ -6,9 +6,11 @@ import models.Student;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public class AdminDAO {
 
     private Session getHibernateSession(){

@@ -10,29 +10,32 @@ import java.util.List;
 @RestController
 public class BellController {
 
+    @Autowired
+    private BellDAO bellDAO;
+
     @GetMapping("/api/Bells")
     public List<Bell> getAllBells(){
-        return new BellDAO().getAllBells();
+        return bellDAO.getAllBells();
     }
 
     @PostMapping("/api/Bells")
     public void createBell(@RequestBody Bell bell){
-        new BellDAO().createBell(bell);
+        bellDAO.createBell(bell);
     }
 
     @GetMapping("/api/Bells/{id}")
     public Bell getBellById(@PathVariable int id){
-        return new BellDAO().getBellById(id);
+        return bellDAO.getBellById(id);
     }
 
     @PutMapping("/api/Bells/{id}")
     public void updateBellById(@RequestBody Bell bell,@PathVariable int id){
-        new BellDAO().updateBellById(bell,id);
+        bellDAO.updateBellById(bell,id);
     }
 
     @DeleteMapping("/api/Bells/{id}")
     public void deleteBellById(@PathVariable int id){
-        new BellDAO().deleteBellById(id);
+        bellDAO.deleteBellById(id);
     }
 
 }

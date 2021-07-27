@@ -1,13 +1,16 @@
 package DataAccess;
 
+import Algorithm.Schedule;
 import models.*;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public class TimeTableDAO {
 
     public TimeTableDAO(){
@@ -139,5 +142,26 @@ public class TimeTableDAO {
             session.close();
         }
         return timeTable;
+    }
+
+    public List<TimeTable> process(int rooms){
+        Session session = getHibernateSession();
+
+        List<TimeTable> timeTables = null;
+
+        try {
+            session.beginTransaction();
+
+            List<TimeTableBell> timeTableBells = new TimeTableBellDAO().getAllTimeTableBells();
+
+            List<Course> courses = new CourseDAO().getAllCourses(null);
+
+            timeTables = new Schedule(timeTableBells,courses,rooms).run();
+
+            session.getTransaction().commit();
+        }finally {
+            session.close();
+        }
+        return timeTables;
     }
 }

@@ -2,6 +2,7 @@ package models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.sun.istack.NotNull;
 
 import javax.persistence.*;
 
@@ -66,5 +67,13 @@ public class Bell {
 
     public void setTimetableBell(TimeTableBell timetableBell) {
         this.timetableBell = timetableBell;
+    }
+
+    @Override
+    public String toString() {
+        return "Bell{" +
+                "label='" + label + '\'' +
+                ", bellOfDay=" + bellOfDay +
+                '}';
     }
 }

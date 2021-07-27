@@ -7,12 +7,14 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
+import org.springframework.stereotype.Repository;
 
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+@Repository
 public class CourseDAO {
     private Session getHibernateSession(){
         SessionFactory sessionFactory = new Configuration()

@@ -55,4 +55,12 @@ public class TimeTableBell {
     public void setDay(Day day) {
         this.day = day;
     }
+
+    @Override
+    public String toString() {
+        return "TimeTableBell{" +
+                "bell=" + bell +
+                ", day=" + day +
+                '}';
+    }
 }

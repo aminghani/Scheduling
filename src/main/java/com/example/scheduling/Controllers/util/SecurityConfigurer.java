@@ -61,6 +61,7 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST,"/api/TimeTableBells").access("hasRole('ROLE_MASTER')")
                 .antMatchers(HttpMethod.DELETE,"/api/TimeTableBells/{id}").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_MASTER')")
                 .antMatchers(HttpMethod.POST,"/api/TimeTables/{id}/Choose").access("hasRole('ROLE_STUDENT')")
+                .antMatchers(HttpMethod.POST,"/apiTimeTables/StartProcess").access("hasRole('ROLE_ADMIN')")
                 .anyRequest().access("hasRole('ROLE_ADMIN') or hasRole('ROLE_MASTER') or hasRole('ROLE_STUDENT')")
         .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);

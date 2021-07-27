@@ -84,5 +84,10 @@ public class Course {
         this.timeTables = timeTables;
     }
 
-
+    @Override
+    public String toString() {
+        return "Course{" +
+                "title='" + title + '\'' +
+                '}';
+    }
 }
